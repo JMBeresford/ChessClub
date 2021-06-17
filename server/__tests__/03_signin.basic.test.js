@@ -12,7 +12,7 @@ const base_user = {
   password: 'pass',
 };
 
-describe('Signin Basic', () => {
+describe('Sign In Basic', () => {
   test('Empty Username', async () => {
     let false_user = { ...base_user, username: '' };
     await axios
