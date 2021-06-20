@@ -14,7 +14,7 @@ describe('Basic API Tests', () => {
     await axios
       .post(URL + '/api/auth/register', base_user)
       .then((res) => {
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(201);
       })
       .catch((err) => {
         expect(err).toEqual(null);

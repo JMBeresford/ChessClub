@@ -33,7 +33,7 @@ describe('Registration Basic', () => {
       await axios
         .post(URL + '/api/auth/register', new_user)
         .then((res) => {
-          expect(res.status).toBe(200);
+          expect(res.status).toBe(201);
         })
         .catch((err) => {
           expect(err).toEqual(null);
@@ -45,7 +45,7 @@ describe('Registration Basic', () => {
     await axios
       .post(URL + '/api/auth/register', base_user)
       .then((res) => {
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(201);
       })
       .catch((err) => {
         expect(err).toEqual(null);
@@ -58,6 +58,8 @@ describe('Registration Basic', () => {
       })
       .catch((err) => {
         expect(err.response.status).toEqual(409);
+        expect(err.response.data.username).toEqual(true);
+        expect(err.response.data.email).toEqual(true);
       });
   });
 

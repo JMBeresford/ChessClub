@@ -13,7 +13,20 @@ const base_user = {
 };
 
 describe('Encryption Basic', () => {
+  beforeEach(() => {
+    User.sync({ force: true });
+  });
+
   // Use bcrypt to encrypt user passwords for storing in DB
-  test.todo('Registration - Password Encrypted');
-  test.todo('Sign In - Password Encrypted');
+  test('Registration - Password Encrypted', async () => {
+    let res = await axios.post(URL + '/api/auth/register', base_user);
+
+    expect(res.status).toBe(201);
+
+    let user = await User.findOne({
+      where: { username: base_user.username },
+    });
+
+    expect(user.password).not.toEqual(base_user.password);
+  });
 });

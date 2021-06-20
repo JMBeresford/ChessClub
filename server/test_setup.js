@@ -1,11 +1,28 @@
 const express = require('express');
+const session = require('express-session');
 const db = require('./database');
+const passport = require('passport');
 
 module.exports = async () => {
   let server;
   const app = express();
   app.use(express.json()); // for parsing application/json
   app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+  // passport config
+  require('./config/passport')(passport);
+
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET || 'secret',
+      resave: true,
+      saveUninitialized: true,
+    })
+  );
+
+  // passport session middleware
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   const router = require('./router');
   app.use('/api', router);
