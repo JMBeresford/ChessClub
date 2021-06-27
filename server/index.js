@@ -1,58 +1,93 @@
 const express = require('express');
 const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const path = require('path');
 const passport = require('passport');
+const cors = require('cors');
+const router = require('./router');
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-  process.env.DB_URI =
-    'sqlite::' + path.join(__dirname, 'database', 'db.sqlite');
-}
+require('dotenv').config();
 
-// passport config
-require('./config/passport')(passport);
+/* ------- DATABASE AND SESSION STORAGE SETUP -------
+ *
+ */
+
+const db = require('./database');
+
+db.sync();
+
+/* ------- EXPRESS CONFIG -------
+ *
+ */
 
 const app = express();
-app.use(express.json()); // for parsing application/json
-app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'secret',
-    resave: true,
-    saveUninitialized: true,
+  cors({
+    origin: ['http://localhost:5050', 'http://localhost:3000'],
+    credentials: true,
   })
 );
 
-// passport session middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+/* ------- SESSION SETUP -------
+ *
+ */
+
+const sessionStore = new SequelizeStore({
+  db: db,
+  expiration: 1000 * 60 * 60 * 24,
+});
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: true,
+    // proxy: true, // if you do SSL outside of node.
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
+
+sessionStore.sync();
+
+/* ------- PASSPORT CONFIG -------
+ *
+ */
+
+require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Set static folder
-const APP_DIR =
-  process.env.NODE_ENV === 'production'
-    ? path.join(__dirname, 'public')
-    : path.join(__dirname, '..', 'client', 'build');
+/* ------- IMPORT ROUTES -------
+ *
+ */
 
-app.use(express.static(APP_DIR));
+app.use(router);
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(APP_DIR, 'index.html'));
+/* ------- ERROR HANDLER -------
+ *
+ */
+
+app.use((err, req, res, next) => {
+  if (err) {
+    console.log(err);
+  }
+  next();
 });
 
-const router = require('./router');
+/* ------- RUN SERVER -------
+ *
+ */
 
-app.use('/api', router);
-
-// RUN SERVER
-const PORT = process.env.PORT;
-
-const db = require('./database');
-db.sync({ force: true });
-
-app.listen(PORT, (err) => {
+app.listen(process.env.PORT || 5000, (err) => {
   if (err) {
     throw err;
   }
-  console.log('Server started on port ' + PORT);
+  console.log('Server started on port ' + process.env.PORT || 5000);
 });

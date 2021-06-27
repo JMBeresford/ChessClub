@@ -1,5 +1,16 @@
 // BACKGROUND
-$bg-dark: rgb(45, 49, 65);
+$bg-dark: #210203;
+$bg-light: #f3f5f7;
+
+$bg: $bg-light;
 
 // TEXT
-$text-light: rgb(255, 236, 199);
+$text-dark: $bg-dark;
+$text-light: $bg-light;
+
+$text: $text-dark;
+
+// ACCENTS
+$accent-blue: #6d98ba;
+$accent-tan: #d3b99f;
+$accent-clay: #c17767;

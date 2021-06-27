@@ -8,9 +8,14 @@ const db =
         storage: path.join(__dirname, '/test_db.sqlite'),
         logging: false,
       })
-    : new Sequelize(process.env.DB_URI, {
-        dialect: process.env.DB_TYPE,
-        storage: path.join(__dirname, '/db.sqlite'),
-      });
+    : new Sequelize(
+        process.env.DB_URI ||
+          'sqlite::' + path.join(__dirname, 'database', 'db.sqlite'),
+        {
+          dialect: process.env.DB_TYPE,
+          storage: path.join(__dirname, '/db.sqlite'),
+          logging: false,
+        }
+      );
 
 module.exports = db;

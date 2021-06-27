@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const passport = require('passport');
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
   let new_user = req.body;
   let saltRounds = 10;
 
@@ -12,11 +12,18 @@ router.post('/register', async (req, res) => {
     !new_user ||
     !new_user.email ||
     !new_user.username ||
-    !new_user.password
+    !new_user.password ||
+    !new_user.password2
   ) {
     res.status(400).json({ msg: 'Missing data from request' });
     return;
   }
+
+  if (new_user.password !== new_user.password2) {
+    res.status(400).json({ msg: "Passwords don't match" });
+  }
+
+  delete new_user.password2;
 
   bcrypt.hash(new_user.password, saltRounds, (err, hash) => {
     if (err) {
@@ -46,49 +53,9 @@ router.post('/register', async (req, res) => {
   });
 });
 
-router.post('/signin', passport.authenticate('local'), (req, res) => {
-  res.status(200).json(req.user);
+router.post('/signin', passport.authenticate('local'), (req, res, next) => {
+  console.log(req.session);
+  res.status(200).json({ user: req.user });
 });
-
-// deprecated
-// router.post('/signin', async (req, res) => {
-//   const credentials = {
-//     username: req.body.username,
-//     password: req.body.password,
-//   };
-
-//   if (!credentials.username || !credentials.password) {
-//     res.status(400).json({ msg: 'Missing username or password' });
-//     return;
-//   }
-
-//   const user = await User.findOne({
-//     where: { username: credentials.username },
-//   }).catch((err) => {
-//     console.error(err);
-//   });
-
-//   if (!user) {
-//     res
-//       .status(400)
-//       .json({ msg: `User with username ${credentials.username} not found` });
-//     return;
-//   }
-
-//   bcrypt.compare(credentials.password, user.password, (err, result) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(500).json({ err });
-//     }
-
-//     if (!result) {
-//       res.status(401).json({ msg: 'Incorrect Password' });
-//     }
-
-//     let token = 'Welcome to the salty spitoon';
-
-//     res.status(200).json({ token });
-//   });
-// });
 
 module.exports = router;

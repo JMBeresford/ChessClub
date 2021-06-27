@@ -1,0 +1,19 @@
+@use '../fonts' as *;
+
+#authheader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+
+  font-family: $serif;
+
+  h1 {
+    font-size: clamp(2.5rem, 1rem + 6vw, 5rem);
+  }
+
+  .header-logo {
+    height: clamp(2.9rem, 1rem + 12vw, 5.5rem);
+  }
+}
