@@ -1,7 +1,10 @@
 import React, { useLayoutEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import ProtectedRoute from './components/routing/protectedRoute';
+import UnprotectedRoute from './components/routing/unprotectedRoute';
 import Auth from './components/auth';
 import vhCheck from 'vh-check';
+import Home from './pages/home';
 
 function App() {
   useLayoutEffect(() => {
@@ -23,12 +26,8 @@ function App() {
     <Router>
       <div className='App'>
         <Switch>
-          <Route path='/auth'>
-            <Auth />
-          </Route>
-          <Route path='/home'>
-            <h1>ass home</h1>
-          </Route>
+          <UnprotectedRoute path='/auth' component={Auth} />
+          <ProtectedRoute path='/' component={Home} />
         </Switch>
         <div id='bg' />
       </div>

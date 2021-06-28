@@ -15,15 +15,18 @@ router.get('/check', (req, res) => {
   res.status(200).json({ msg: 'We gucci' });
 });
 
+router.get('/api/authenticate', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(401);
+  }
+});
+
 router.use('/api/auth', auth);
 
 // route catch all (react router used on client)
 router.get('/*', (req, res) => {
-  if (req.isAuthenticated()) {
-    console.log('auth');
-  } else {
-    console.log('not auth');
-  }
   res.sendFile(path.join(APP_DIR, 'index.html'));
 });
 

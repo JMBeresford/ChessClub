@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import Header from '../header/authheader';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 const Signin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState(false);
+  const [user, setUser] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -16,7 +17,9 @@ const Signin = () => {
     axios
       .post(API_URL + 'auth/signin', payload, { withCredentials: true })
       .then((res) => {
-        console.log(res);
+        if (res.status === 200) {
+          setUser(res.data.user);
+        }
       })
       .catch((err) => {
         if (err.response && err.response.status === 401) {
@@ -39,6 +42,7 @@ const Signin = () => {
 
   return (
     <div id='signin'>
+      {user && <Redirect to={{ pathname: '/' }} />}
       <Header />
       <form onSubmit={handleSubmit}>
         <label>

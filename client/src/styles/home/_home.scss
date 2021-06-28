@@ -1,0 +1,22 @@
+#home {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  main {
+    display: grid;
+    height: 100%;
+    width: 100%;
+
+    grid-template-areas:
+      'user'
+      'quick-play'
+      'games'
+      '.';
+
+    grid-template-rows: 40% 25% 25% 10%;
+  }
+}
