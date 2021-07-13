@@ -17,7 +17,7 @@ router.get('/check', (req, res) => {
 
 router.get('/api/authenticate', (req, res) => {
   if (req.isAuthenticated()) {
-    res.sendStatus(200);
+    res.status(200).json(req.user);
   } else {
     res.sendStatus(401);
   }

@@ -5,12 +5,15 @@ const User = db.define('User', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: 'compositeUserIndex', // user AND/OR email cannot be the same across any 2 users
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
   },
   username: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: 'compositeUserIndex', // user AND/OR email cannot be the same across any 2 users
+    unique: true,
   },
   id: {
     type: DataTypes.INTEGER,

@@ -7,9 +7,7 @@ export async function isAuthenticated() {
       withCredentials: true,
     });
 
-    console.log(res);
-
-    if (res.status === 200) return true;
+    if (res.status === 200) return res.data;
 
     return false;
   } catch (error) {

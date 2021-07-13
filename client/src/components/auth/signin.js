@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import Header from '../header/authheader';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import Input from './input';
+import {
+  RiKeyFill,
+  RiUserFill,
+  RiAppleFill,
+  RiFacebookCircleFill,
+} from 'react-icons/ri';
+import { FcGoogle } from 'react-icons/fc';
 
 const Signin = () => {
   const [username, setUsername] = useState('');
@@ -22,10 +30,12 @@ const Signin = () => {
         }
       })
       .catch((err) => {
-        if (err.response && err.response.status === 401) {
-          setPassword('');
-          setUsername('');
-          setErrors(true);
+        if (err.response) {
+          if (err.response.status === 401 || err.response.status === 400) {
+            setPassword('');
+            setUsername('');
+            setErrors(true);
+          }
         }
       });
   };
@@ -45,33 +55,50 @@ const Signin = () => {
       {user && <Redirect to={{ pathname: '/' }} />}
       <Header />
       <form onSubmit={handleSubmit}>
-        <label>
-          Username
-          <input
-            className={`input${errors ? ' error' : ''}`}
-            type='text'
-            value={username}
-            onChange={handleUsernameChange}
-          />
-        </label>
-        <label>
-          Password
-          <input
-            className={`input${errors ? ' error' : ''}`}
-            type='password'
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </label>
+        {errors && <p className='errorText'>Incorrect Credentials</p>}
+        <Input
+          className={`input ${errors ? 'error' : ''} ${
+            username.length > 0 ? 'active' : ''
+          }`}
+          type='text'
+          id='usernameForm'
+          label='Username'
+          value={username}
+          icon={RiUserFill}
+          onChange={handleUsernameChange}
+        />
+        <Input
+          className={`input ${errors ? 'error' : ''} ${
+            password.length > 0 ? 'active' : ''
+          }`}
+          type='password'
+          id='passwordForm'
+          label='Password'
+          value={password}
+          icon={RiKeyFill}
+          onChange={handlePasswordChange}
+        />
 
-        <div className='buttons'>
-          <input type='submit' id='login-btn' className='btn' value='Sign In' />
-          <p>or</p>
-          <Link to='/auth/register' id='register-btn' className='btn'>
-            Register
-          </Link>
-        </div>
+        <input type='submit' id='signin-btn' className='btn' value='Sign In' />
       </form>
+
+      <div className='alternatives'>
+        <div className='socials'>
+          <div className='social google'>
+            <FcGoogle size='60%' />
+          </div>
+          <div className='social apple'>
+            <RiAppleFill size='60%' color='white' />
+          </div>
+          <div className='social facebook'>
+            <RiFacebookCircleFill size='60%' color='white' />
+          </div>
+        </div>
+
+        <Link to='/auth/register' id='register-btn'>
+          or register instead
+        </Link>
+      </div>
     </div>
   );
 };

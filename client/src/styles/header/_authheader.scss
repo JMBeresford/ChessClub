@@ -1,11 +1,10 @@
 @use '../fonts' as *;
 
 #authheader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  display: grid;
+  place-items: center;
   width: 100%;
+  height: min-content;
 
   font-family: $serif;
 
@@ -14,6 +13,7 @@
   }
 
   .header-logo {
-    height: clamp(2.9rem, 1rem + 12vw, 5.5rem);
+    width: 50%;
+    filter: drop-shadow(-3px 3px 4px rgba(0, 0, 0, 0.5));
   }
 }

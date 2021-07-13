@@ -1,6 +1,6 @@
 import React from 'react';
 
-const User = () => {
+const User = (props) => {
   return (
     <div id='home-user'>
       <div className='img-wrap'>
@@ -9,8 +9,11 @@ const User = () => {
           alt='chess profile'
         />
       </div>
-      <main></main>
-      <div className='inset'></div>
+      <div className='text'>
+        <h1>{props.user.username}</h1>
+        <h3>Rating: {props.user.rating || 1823}</h3>
+      </div>
+      <div className='bg'></div>
     </div>
   );
 };

@@ -1,16 +1,25 @@
 // BACKGROUND
 $bg-dark: #210203;
-$bg-light: #f3f5f7;
+$bg-light: #fafcff;
 
-$bg: $bg-light;
+$grey: #707070;
+
+$bg-light-darkmode: $bg-dark;
+$bg-dark-darkmode: $bg-light;
 
 // TEXT
 $text-dark: $bg-dark;
 $text-light: $bg-light;
 
-$text: $text-dark;
+$text-light-darkmode: $text-dark;
+$text-dark-darkmode: $text-light;
 
 // ACCENTS
-$accent-blue: #6d98ba;
-$accent-tan: #d3b99f;
-$accent-clay: #c17767;
+$accent-blue: #5099d4;
+$accent-teal: #7ccad4;
+$accent-orange: #ff6200;
+$accent-yellow: #ffba00;
+
+// GRADIENTS
+
+$gradient-blue: linear-gradient(135deg, $accent-blue 0%, $accent-teal 100%);

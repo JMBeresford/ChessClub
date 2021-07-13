@@ -5,6 +5,7 @@ import UnprotectedRoute from './components/routing/unprotectedRoute';
 import Auth from './components/auth';
 import vhCheck from 'vh-check';
 import Home from './pages/home';
+import Background from './components/background';
 
 function App() {
   useLayoutEffect(() => {
@@ -29,8 +30,8 @@ function App() {
           <UnprotectedRoute path='/auth' component={Auth} />
           <ProtectedRoute path='/' component={Home} />
         </Switch>
-        <div id='bg' />
       </div>
+      <Background />
     </Router>
   );
 }

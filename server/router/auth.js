@@ -21,6 +21,7 @@ router.post('/register', async (req, res, next) => {
 
   if (new_user.password !== new_user.password2) {
     res.status(400).json({ msg: "Passwords don't match" });
+    return;
   }
 
   delete new_user.password2;
@@ -36,25 +37,29 @@ router.post('/register', async (req, res, next) => {
     User.create(new_user)
       .then(() => {
         res.sendStatus(201);
+        return;
       })
       .catch((err) => {
-        let errors = { email: false, username: false };
+        let errors = { email: false, username: false, notEmail: false };
         if (err && err.errors) {
           for (let error of err.errors) {
             if (error.type === 'unique violation') {
               if (error.path === 'username') errors.username = true;
               if (error.path === 'email') errors.email = true;
+            } else if (error.type === 'Validation error') {
+              if (error.path === 'email') errors.notEmail = true;
             }
           }
+          res.status(409).json(errors);
+          return;
         }
 
-        res.status(409).json(errors);
+        res.sendStatus(500);
       });
   });
 });
 
 router.post('/signin', passport.authenticate('local'), (req, res, next) => {
-  console.log(req.session);
   res.status(200).json({ user: req.user });
 });
 
