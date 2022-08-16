@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/header/header';
 import User from '../components/home/user';
 import QuickPlay from '../components/home/quickplay';
+import EloChart from '../components/home/elochart';
 
 const Home = (props) => {
   return (
@@ -10,6 +11,7 @@ const Home = (props) => {
       <main>
         <User {...props} />
         <QuickPlay {...props} />
+        <EloChart {...props} />
       </main>
     </div>
   );

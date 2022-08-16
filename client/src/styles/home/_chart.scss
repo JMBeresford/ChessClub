@@ -1,0 +1,12 @@
+@use "../colors" as *;
+@use "../fonts" as *;
+@use "../utils";
+
+#elo-chart {
+  grid-area: elo-chart;
+
+  background-color: $bg-light;
+  border-radius: 15px;
+  box-shadow: utils.$shadow;
+  padding: 1rem;
+}
